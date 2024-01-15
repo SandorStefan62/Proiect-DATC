@@ -5,6 +5,7 @@ const { run } = require('./db.js');
 const { authRouter } = require('./routes/auth.js');
 const { allergenRouter } = require('./routes/allergen.js');
 const { userRouter } = require('./routes/user.js');
+const { validateRouter } = require('./routes/validateToken.js');
 
 require('dotenv').config();
 
@@ -14,6 +15,7 @@ const port = process.env.PORT;
 app.use(bodyParser.json());
 app.use(cors({ origin: "*" }));
 
+app.use('/validate', validateRouter)
 app.use('/auth', authRouter);
 app.use('/user', userRouter);
 app.use('/allergen', allergenRouter);
