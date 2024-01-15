@@ -3,7 +3,7 @@ import axios from "axios";
 async function validateToken(token) {
     try {
         const response = await axios.post(
-            'http://localhost:3000/validate/validateToken',
+            'https://datcbackend.azurewebsites.net/api/validate/validateToken',
             null,
             {
                 headers: {

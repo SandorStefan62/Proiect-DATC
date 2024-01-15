@@ -33,7 +33,7 @@ function LoginPage() {
 
         try {
             console.log(credentials);
-            const response = await axios.post('http://localhost:3000/auth/login', credentials);
+            const response = await axios.post('https://datcbackend.azurewebsites.net/api/auth/login', credentials);
             console.log(JSON.stringify(response.data.token));
 
             if (response.status === 201) {
