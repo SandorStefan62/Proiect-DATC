@@ -15,6 +15,9 @@ const port = process.env.PORT;
 app.use(bodyParser.json());
 app.use(cors({ origin: "*" }));
 
+app.get('/', (req, res) => {
+    res.json({ message: `Connected to Proiect DATC api!` });
+})
 app.use('/api/validate', validateRouter)
 app.use('/api/auth', authRouter);
 app.use('/api/user', userRouter);
