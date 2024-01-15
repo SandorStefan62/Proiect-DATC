@@ -6,6 +6,20 @@ const { client } = require('../db.js');
 const userRouter = express.Router();
 const db = client.db('proiect-datc');
 
+//GET /user/getAllUsers: retrieve all user profiles
+userRouter.get('/getAllUsers', verifyToken, async (req, res) => {
+    try {
+        const collection = db.collection('users');
+
+        const users = await collection.find().toArray();
+
+        return res.status(200).json({ users });
+    } catch (error) {
+        console.error(`Failed to retrieve all users: ${error}`);
+        return res.status(500).json({ error: `Internal server error` });
+    }
+});
+
 //GET /user/profile: retrieve user profile information
 userRouter.get('/profile', verifyToken, async (req, res) => {
     try {
