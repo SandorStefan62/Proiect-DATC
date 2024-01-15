@@ -15,10 +15,10 @@ const port = process.env.PORT;
 app.use(bodyParser.json());
 app.use(cors({ origin: "*" }));
 
-app.use('/validate', validateRouter)
-app.use('/auth', authRouter);
-app.use('/user', userRouter);
-app.use('/allergen', allergenRouter);
+app.use('/api/validate', validateRouter)
+app.use('/api/auth', authRouter);
+app.use('/api/user', userRouter);
+app.use('/api/allergen', allergenRouter);
 
 app.listen(port, () => {
     console.log(`Api is listening on port: ${port}`);
