@@ -93,7 +93,7 @@ userRouter.get('/allergens', verifyToken, async (req, res) => {
 userRouter.delete('/', verifyToken, async (req, res) => {
     try {
         const collection = db.collection('users');
-        const username = req.user;
+        const username = req.user.username;
 
         const result = await collection.deleteOne({ username });
 
