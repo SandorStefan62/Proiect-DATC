@@ -11,6 +11,88 @@ function MapComponent({ apiKey, showAddModal }) {
     const [selectedMarker, setSelectedMarker] = useState(null);
     apiKey = "AIzaSyAqs4IjsXNJNnlnNhW7atHmzLzmg0vNne8"
 
+    const darkMapStyles = [
+        { elementType: "geometry", stylers: [{ color: "#242f3e" }] },
+        { elementType: "labels.text.stroke", stylers: [{ color: "#242f3e" }] },
+        { elementType: "labels.text.fill", stylers: [{ color: "#746855" }] },
+        {
+            featureType: "administrative.locality",
+            elementType: "labels.text.fill",
+            stylers: [{ color: "#d59563" }],
+        },
+        {
+            featureType: "poi",
+            elementType: "labels.text.fill",
+            stylers: [{ color: "#d59563" }],
+        },
+        {
+            featureType: "poi.park",
+            elementType: "geometry",
+            stylers: [{ color: "#263c3f" }],
+        },
+        {
+            featureType: "poi.park",
+            elementType: "labels.text.fill",
+            stylers: [{ color: "#6b9a76" }],
+        },
+        {
+            featureType: "road",
+            elementType: "geometry",
+            stylers: [{ color: "#38414e" }],
+        },
+        {
+            featureType: "road",
+            elementType: "geometry.stroke",
+            stylers: [{ color: "#212a37" }],
+        },
+        {
+            featureType: "road",
+            elementType: "labels.text.fill",
+            stylers: [{ color: "#9ca5b3" }],
+        },
+        {
+            featureType: "road.highway",
+            elementType: "geometry",
+            stylers: [{ color: "#746855" }],
+        },
+        {
+            featureType: "road.highway",
+            elementType: "geometry.stroke",
+            stylers: [{ color: "#1f2835" }],
+        },
+        {
+            featureType: "road.highway",
+            elementType: "labels.text.fill",
+            stylers: [{ color: "#f3d19c" }],
+        },
+        {
+            featureType: "transit",
+            elementType: "geometry",
+            stylers: [{ color: "#2f3948" }],
+        },
+        {
+            featureType: "transit.station",
+            elementType: "labels.text.fill",
+            stylers: [{ color: "#d59563" }],
+        },
+        {
+            featureType: "water",
+            elementType: "geometry",
+            stylers: [{ color: "#17263c" }],
+        },
+        {
+            featureType: "water",
+            elementType: "labels.text.fill",
+            stylers: [{ color: "#515c6d" }],
+        },
+        {
+            featureType: "water",
+            elementType: "labels.text.stroke",
+            stylers: [{ color: "#17263c" }],
+        },
+
+    ]
+
     const fetchAllergenZones = async () => {
         try {
             const response = await axios.get('https://datcbackend.azurewebsites.net/api/allergen/getAllAllergens', {
@@ -98,6 +180,23 @@ function MapComponent({ apiKey, showAddModal }) {
         }
     };
 
+    const handleDeleteAllergen = async (allergenId) => {
+        try {
+            const response = await axios.delete(`https://datcbackend.azurewebsites.net/api/allergen/${allergenId}`, {
+                headers: {
+                    'Authorization': localStorage.getItem('token')
+                }
+            });
+
+            if (response.status === 200) {
+                fetchAllergenZones();
+                handleInfoWindowClose();
+            }
+        } catch (error) {
+            console.error(`Error deleting allergen zone: ${error}`);
+        }
+    };
+
     const handleMarkerClick = (marker) => {
         setSelectedMarker(marker);
     };
@@ -113,11 +212,15 @@ function MapComponent({ apiKey, showAddModal }) {
                     <GoogleMap
                         mapContainerStyle={{
                             height: '80vh',
-                            width: '80vw'
+                            width: '80vw',
+                            borderRadius: '10px'
                         }}
                         zoom={14}
                         center={position}
                         onClick={handleMapClick}
+                        options={{
+                            styles: darkMapStyles,
+                        }}
                     >
                         {allergenZones.map((allergenZone) => (
                             <MarkerF
@@ -144,6 +247,9 @@ function MapComponent({ apiKey, showAddModal }) {
                                         <>
                                             <h2 className="text-2xl font-bold mb-2">{selectedMarker.allergenType}</h2>
                                             <p>Reported by: {selectedMarker.reportedBy}</p>
+                                            <div className='flex justify-between'>
+                                                <button onClick={() => handleDeleteAllergen(selectedMarker._id)}>Delete</button>
+                                            </div>
                                         </>
                                     )}
                                 </div>
