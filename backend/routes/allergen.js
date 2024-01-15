@@ -8,6 +8,7 @@ const allergenRouter = express.Router();
 const db = client.db('proiect-datc');
 const timeZone = `Europe/Bucharest`;
 
+//POST /allergen/addAllergenZone: adds new reported allergen zone
 allergenRouter.post('/addAllergenZone', verifyToken, async (req, res) => {
     try {
         const { latitude, longitude, allergenType } = req.body;

@@ -6,9 +6,10 @@ const { client } = require('../db.js');
 const authRouter = express.Router();
 const db = client.db('proiect-datc');
 
+//POST: /auth/register: registers new account
 authRouter.post("/register", async (req, res) => {
     try {
-        const { username, email, password } = req.body;
+        const { username, email, password, role } = req.body;
 
         if (!username || !email || !password) {
             return res.status(400).json({ error: `Incomplete request data` });
@@ -24,11 +25,18 @@ authRouter.post("/register", async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
+        if (role === "admin") {
+            newRole = "admin";
+        }
+        else {
+            newRole = "user";
+        }
+
         const newUser = {
             username,
             email,
             password: hashedPassword,
-            role: "user"
+            role: newRole
         }
 
         await collection.insertOne(newUser);
@@ -39,6 +47,7 @@ authRouter.post("/register", async (req, res) => {
     }
 });
 
+//POST /auth/login: logins account
 authRouter.post("/login", async (req, res) => {
     try {
         const { username, password } = req.body;
