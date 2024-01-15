@@ -2,6 +2,7 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const { verifyToken } = require('../middlewares/authMiddleware.js');
 const { client } = require('../db.js');
+const { ObjectId } = require('mongodb');
 
 const userRouter = express.Router();
 const db = client.db('proiect-datc');
@@ -21,11 +22,11 @@ userRouter.get('/getAllUsers', verifyToken, async (req, res) => {
 });
 
 //GET /user/profile: retrieve user profile information
-userRouter.get('/profile', verifyToken, async (req, res) => {
+userRouter.get('/profile/:id', verifyToken, async (req, res) => {
     try {
         const collection = db.collection('users');
-        console.log(req.user.username);
-        const user = await collection.findOne({ username: req.user.username });
+        const userId = req.params.id;
+        const user = await collection.findOne({ _id: new ObjectId(userId) });
 
         if (!user) {
             return res.status(404).json({ error: `User not found` });
@@ -41,10 +42,10 @@ userRouter.get('/profile', verifyToken, async (req, res) => {
 });
 
 //PUt /user/profile: update user profile information
-userRouter.put('/profile', verifyToken, async (req, res) => {
+userRouter.put('/profile/:id', verifyToken, async (req, res) => {
     try {
         const collection = db.collection('users');
-        const { username } = req.user;
+        const userId = req.params.id;
 
         //req.body contains updated user data
         const updatedUserData = req.body;
@@ -54,7 +55,7 @@ userRouter.put('/profile', verifyToken, async (req, res) => {
             delete updatedUserData.password;
         }
 
-        const result = await collection.updateOne({ username }, { $set: updatedUserData });
+        const result = await collection.updateOne({ _id: new ObjectId(userId) }, { $set: updatedUserData });
 
         if (result.modifiedCount === 0) {
             return res.status(404).json({ error: `User not found` });
@@ -68,17 +69,15 @@ userRouter.put('/profile', verifyToken, async (req, res) => {
 });
 
 //PUT /user/updatePassword: update and encrypt user password
-userRouter.put('/updatePassword', verifyToken, async (req, res) => {
+userRouter.put('/updatePassword/:id', verifyToken, async (req, res) => {
     try {
         const collection = db.collection('users');
-        const { username } = req.user;
-        console.log(JSON.stringify(username));
+        const userId = req.params.id;
         const { newPassword } = req.body;
-        console.log(JSON.stringify(newPassword));
 
         const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-        const result = await collection.updateOne({ username }, { $set: { password: hashedPassword } });
+        const result = await collection.updateOne({ _id: new ObjectId(userId) }, { $set: { password: hashedPassword } });
 
         if (result.modifiedCount === 0) {
             return res.status(404).json({ error: `User not found` });
@@ -91,10 +90,11 @@ userRouter.put('/updatePassword', verifyToken, async (req, res) => {
 });
 
 //GET /user/allergens: retrieve all alergens reported by user
-userRouter.get('/allergens', verifyToken, async (req, res) => {
+userRouter.get('/allergens/:id', verifyToken, async (req, res) => {
     try {
         const collection = db.collection('allergens');
-        const userAllergens = await collection.find({ reportedBy: req.user.username }).toArray();
+        const userId = req.params.id;
+        const userAllergens = await collection.find({ _id: new ObjectId(userId) }).toArray();
 
         return res.status(200).json(userAllergens);
     } catch (error) {
@@ -104,12 +104,12 @@ userRouter.get('/allergens', verifyToken, async (req, res) => {
 });
 
 //DELETE /user: delete user account
-userRouter.delete('/', verifyToken, async (req, res) => {
+userRouter.delete('/:id', verifyToken, async (req, res) => {
     try {
         const collection = db.collection('users');
-        const username = req.user.username;
+        const userId = req.params.id;
 
-        const result = await collection.deleteOne({ username });
+        const result = await collection.deleteOne({ _id: new ObjectId(userId) });
 
         if (result.deletedCount === 0) {
             return res.status(404).json({ error: `User not found` });
