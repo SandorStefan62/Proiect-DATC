@@ -46,20 +46,52 @@ function LoginPage() {
     };
 
     return (
-        <>
-            <h1 className="text-3xl font-bold underline">
-                Login Page!
-            </h1>
-            <div>
-                <label>Username:</label>
-                <input type="text" name="username" value={credentials.username} onChange={handleChange} />
+        <div className="min-h-screen flex items-center justify-center bg-gray-700">
+            <div className="bg-gray-700 p-8 rounded w-96">
+                <h1 className="text-3xl font-bold mb-6">Login Page</h1>
+                <form>
+                    <div className="mb-4">
+                        <label
+                            htmlFor="username"
+                            className="block text-white font-semibold mb-2 text-left"
+                        >
+                            Username:
+                        </label>
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            value={credentials.username}
+                            onChange={handleChange}
+                            className="w-full p-2 border rounded"
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label
+                            htmlFor="password"
+                            className="block text-white font-semibold mb-2 text-left"
+                        >
+                            Password:
+                        </label>
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            value={credentials.password}
+                            onChange={handleChange}
+                            className="w-full p-2 border rounded"
+                        />
+                    </div>
+                    <button
+                        type="submit"
+                        onClick={handleLogin}
+                        className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+                    >
+                        Login
+                    </button>
+                </form>
             </div>
-            <div>
-                <label>Password:</label>
-                <input type="password" name="password" value={credentials.password} onChange={handleChange} />
-            </div>
-            <button onClick={handleLogin}>Login</button>
-        </>
+        </div>
     );
 }
 

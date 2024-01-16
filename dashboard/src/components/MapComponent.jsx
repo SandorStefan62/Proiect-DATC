@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { GoogleMap, LoadScript, MarkerF, InfoWindow } from '@react-google-maps/api';
 import axios from 'axios';
 
-function MapComponent({ apiKey, showAddModal }) {
+function MapComponent({ apiKey, showAddModal, allergen }) {
     const [position, setPosition] = useState({ lat: 0, lng: 0 });
     const [allergenZones, setAllergenZones] = useState([]);
     const [newMarker, setNewMarker] = useState(null);
@@ -104,7 +104,6 @@ function MapComponent({ apiKey, showAddModal }) {
 
             if (response.status === 200) {
                 const data = await response.data;
-                console.log(data);
                 setAllergenZones(data.allergens);
             }
         } catch (error) {
@@ -137,6 +136,10 @@ function MapComponent({ apiKey, showAddModal }) {
         fetchLocation();
         fetchAllergenZones();
     }, []);
+
+    const filteredAllergenZones = allergen
+        ? allergenZones.filter((zone) => zone.allergenType === allergen)
+        : allergenZones;
 
     const handleMapClick = (e) => {
         if (showAddModal) {
@@ -222,7 +225,15 @@ function MapComponent({ apiKey, showAddModal }) {
                             styles: darkMapStyles,
                         }}
                     >
-                        {allergenZones.map((allergenZone) => (
+                        {/* {(zones && zones.length > 0) && zones.map((allergenZone) => (
+                            <MarkerF
+                                key={allergenZone._id}
+                                position={{ lat: allergenZone.latitude, lng: allergenZone.longitude }}
+                                onClick={() => handleMarkerClick(allergenZone)}
+                            />
+                        ))} */}
+
+                        {filteredAllergenZones.map((allergenZone) => (
                             <MarkerF
                                 key={allergenZone._id}
                                 position={{ lat: allergenZone.latitude, lng: allergenZone.longitude }}

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from "react-router-dom";
 
-function Sidebar({ onAddButtonClick, onShowUsersButtonClick, onShowRegisterUserButtonClick, showAddModal, showTable, showRegisterModal }) {
+function Sidebar({ onAddButtonClick, onShowUsersButtonClick, onShowRegisterUserButtonClick, onShowSpecificZonesButtonClick, onRemoveFilterButtonClick, showAddModal, showTable }) {
     const navigate = useNavigate();
 
     const handleLogout = () => {
@@ -20,14 +20,28 @@ function Sidebar({ onAddButtonClick, onShowUsersButtonClick, onShowRegisterUserB
                         </button>
                     </li>
                 }
+                {!showTable &&
+                    <li>
+                        <button className="w-full py-2 mb-2 bg-indigo-900 text-white rounded" onClick={onShowSpecificZonesButtonClick}>
+                            Show specific allergen zones
+                        </button>
+                    </li>
+                }
+                {!showTable &&
+                    <li>
+                        <button className="w-full py-2 mb-2 bg-indigo-900 text-white rounded" onClick={onRemoveFilterButtonClick}>
+                            Remove filter
+                        </button>
+                    </li>
+                }
                 <li>
                     <button className="w-full py-2 mb-2 bg-indigo-900 text-white rounded" onClick={onShowUsersButtonClick}>
-                        {showTable ? "Click again to return to the map" : "Show all users"}
+                        {showTable ? "Click to return to the map" : "Show all users"}
                     </button>
                 </li>
                 <li>
                     <button className="w-full py-2 mb-2 bg-indigo-900 text-white rounded" onClick={onShowRegisterUserButtonClick}>
-                        {showRegisterModal ? "Click again to return to the map" : "Register new user"}
+                        Register new user
                     </button>
                 </li>
                 <li>

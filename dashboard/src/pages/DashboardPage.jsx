@@ -7,6 +7,7 @@ function DashboardPage() {
     const [showAddModal, setShowAddModal] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [showRegisterModal, setShowRegisterModal] = useState(false);
+    const [showSpecificZoneModal, setShowSpecificZoneModal] = useState(false);
     const [showTable, setShowTable] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
     const [users, setUsers] = useState([]);
@@ -14,6 +15,7 @@ function DashboardPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [role, setRole] = useState('');
+    const [allergen, setAllergen] = useState('');
 
     const handleAddButtonClick = () => {
         setShowAddModal(!showAddModal);
@@ -31,7 +33,14 @@ function DashboardPage() {
 
     const handleShowUserRegistrationModal = () => {
         setShowRegisterModal(true);
-        console.log(showRegisterModal);
+    }
+
+    const handleShowSpecificZonesButtonClick = () => {
+        setShowSpecificZoneModal(true);
+    }
+
+    const handleRemoveFilterButtonClick = () => {
+        setAllergen('');
     }
 
     const fetchAllUsers = async () => {
@@ -106,7 +115,6 @@ function DashboardPage() {
 
     const handleRegisterUser = async () => {
         try {
-            console.log(username + " " + email + " " + password);
             if (!username || !email || !password) {
                 console.error(`Incomplete data for registration`);
                 return;
@@ -126,15 +134,44 @@ function DashboardPage() {
         } catch (error) {
             console.error(`Error registering new user: ${error}`);
         }
+    };
+
+    const handleShowSpecificZones = (allergen) => {
+        // try {
+        //     const response = axios.get('https://datcbackend.azurewebsites.net/api/allergen/getAllAllergens', {
+        //         headers: {
+        //             'Authorization': localStorage.getItem('token')
+        //         }
+        //     });
+
+        //     if (response.status === 200) {
+        //         const allergens = response.data.allergens;
+        //         const zones = allergens.filter(zone => zone.allergenType === allergen);
+        //         setZones(zones);
+        //     }
+        // } catch (error) {
+        //     console.log(`Error retrieving specific zones: ${error}`);
+        // }
+        setAllergen(allergen);
+        console.log(allergen);
     }
 
     return (
         <div className="flex w-screen h-screen bg-red-400 relative">
             <div className="bg-gray-800 text-white w-1/6 p-4 h-screen">
-                <Sidebar onAddButtonClick={handleAddButtonClick} onShowUsersButtonClick={handleShowUsersButtonClick} onShowRegisterUserButtonClick={handleShowUserRegistrationModal} showAddModal={showAddModal} showTable={showTable} showRegisterModal={showRegisterModal} />
+                <Sidebar
+                    onAddButtonClick={handleAddButtonClick}
+                    onShowUsersButtonClick={handleShowUsersButtonClick}
+                    onShowRegisterUserButtonClick={handleShowUserRegistrationModal}
+                    onShowSpecificZonesButtonClick={handleShowSpecificZonesButtonClick}
+                    onRemoveFilterButtonClick={handleRemoveFilterButtonClick}
+                    showAddModal={showAddModal}
+                    showTable={showTable}
+                    showRegisterModal={showRegisterModal}
+                />
             </div>
             <div className="bg-gray-700 text-white w-5/6 flex items-center justify-center relative">
-                <MapComponent showAddModal={showAddModal} />
+                <MapComponent showAddModal={showAddModal} allergen={allergen} />
                 {showTable && (
                     <div className="absolute top-0 left-0 w-full h-full bg-gray-700 text-white flex items-center justify-center">
                         <div className="mt-4">
@@ -168,7 +205,7 @@ function DashboardPage() {
                                 <div className="modal transition-opacity ease-in duration-700 opacity 100">
                                     <div className="modal-content bg-gray-800 p-8 rounded-md shadow-md">
                                         <h2 className="text-2xl font-bold mb-4">Edit user data</h2>
-                                        <label className="block mb-4">
+                                        <label className="block mb-4 text-left">
                                             Username:
                                             <input
                                                 type="text"
@@ -177,7 +214,7 @@ function DashboardPage() {
                                                 className="mt-1 p-2 border rounded w-full"
                                             />
                                         </label>
-                                        <label className="block mb-4">
+                                        <label className="block mb-4 text-left">
                                             Email:
                                             <input
                                                 type="text"
@@ -186,7 +223,7 @@ function DashboardPage() {
                                                 className="mt-1 p-2 border rounded w-full"
                                             />
                                         </label>
-                                        <label className="block mb-4">
+                                        <label className="block mb-4 text-left">
                                             Role:
                                             <input
                                                 type="text"
@@ -220,7 +257,7 @@ function DashboardPage() {
                         <div className="modal transition-opacity ease-in duration-700 opacity 100">
                             <div className="modal-content bg-gray-800 p-8 rounded-md shadow-md">
                                 <h2 className="text-2xl font-bold mb-4">Edit user data</h2>
-                                <label className="block mb-4">
+                                <label className="block mb-4 text-left">
                                     Username:
                                     <input
                                         type="text"
@@ -229,7 +266,7 @@ function DashboardPage() {
                                         className="mt-1 p-2 border rounded w-full"
                                     />
                                 </label>
-                                <label className="block mb-4">
+                                <label className="block mb-4 text-left">
                                     Email:
                                     <input
                                         type="text"
@@ -238,7 +275,7 @@ function DashboardPage() {
                                         className="mt-1 p-2 border rounded w-full"
                                     />
                                 </label>
-                                <label className="block mb-4">
+                                <label className="block mb-4 text-left">
                                     Password:
                                     <input
                                         type="text"
@@ -256,6 +293,38 @@ function DashboardPage() {
                                     </button>
                                     <button
                                         onClick={() => setShowRegisterModal(false)}
+                                        className="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600"
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+                {showSpecificZoneModal && (
+                    <div className="z-1 fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                        <div className="modal transition-opacity ease-in duration-700 opacity 100">
+                            <div className="modal-content bg-gray-800 p-8 rounded-md shadow-md">
+                                <h2 className="text-2xl font-bold mb-4">Edit user data</h2>
+                                <label className="block mb-4 text-left">
+                                    Allergen:
+                                    <input
+                                        type="text"
+                                        value={allergen}
+                                        onChange={(e) => setAllergen(e.target.value)}
+                                        className="mt-1 p-2 border rounded w-full"
+                                    />
+                                </label>
+                                <div className="flex justify-between">
+                                    <button
+                                        onClick={() => handleShowSpecificZones(allergen)}
+                                        className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+                                    >
+                                        Find zones
+                                    </button>
+                                    <button
+                                        onClick={() => setShowSpecificZoneModal(false)}
                                         className="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600"
                                     >
                                         Cancel
