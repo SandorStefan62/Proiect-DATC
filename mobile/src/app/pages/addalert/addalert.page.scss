@@ -1,0 +1,24 @@
+ion-toolbar {
+    --background: green;
+    --color: white;
+   }
+   ion-content {
+    --background: green;
+    --color: black;
+   }
+   .login-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+   }
+   
+   form {
+    width: 40%;
+   }
+   
+   ion-input, ion-button {
+    background-color: white;
+    width: 100%;
+   }

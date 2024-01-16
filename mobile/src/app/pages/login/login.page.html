@@ -1,0 +1,16 @@
+<ion-header>
+ <ion-toolbar color="success">
+   <ion-title>Ambrozie</ion-title>
+ </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="login-container">
+    <form #loginForm="ngForm" (ngSubmit)="submit(loginForm)">
+      <ion-input type="text" name="username" [(ngModel)]="username" placeholder="User"></ion-input>
+      <ion-input type="password" name="password" [(ngModel)]="password" placeholder="Parola"></ion-input>
+      <ion-button expand="full" type="submit" (click)="clearUser()" (click)="clearPass()">Login</ion-button>
+    </form>
+    <ion-button expand="full" type="submit" (click)="createUser()">Create User</ion-button>
+   </div>
+</ion-content>

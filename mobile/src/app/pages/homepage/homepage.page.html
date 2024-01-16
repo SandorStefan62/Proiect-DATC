@@ -1,0 +1,14 @@
+<ion-header>
+  <ion-toolbar color="success">
+    <ion-title>Homepage</ion-title>
+  </ion-toolbar>
+ </ion-header>
+ 
+ <ion-content>
+  <gmp-map [center]="center" zoom="14" map-id="DEMO_MAP_ID">
+    <gmp-advanced-marker [position]="markAlert" title="My location">
+    </gmp-advanced-marker>
+  </gmp-map>
+  <ion-button expand="full" type="submit" (click)="addAlert()">Add alert</ion-button>
+  <ion-button expand="full" type="submit" (click)="signOut()">Sign out</ion-button>
+ </ion-content>

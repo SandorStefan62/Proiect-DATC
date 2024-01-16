@@ -1,0 +1,7 @@
+{
+  "name": "ambrozie-proiect",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

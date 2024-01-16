@@ -1,0 +1,17 @@
+<ion-header>
+  <ion-toolbar color="success">
+    <ion-title>Create User</ion-title>
+  </ion-toolbar>
+ </ion-header>
+ 
+ <ion-content>
+   <div class="login-container">
+     <form #createUserForm="ngForm" (ngSubmit)="submit(createUserForm)">
+       <ion-input type="text" name="username" [(ngModel)]="username" placeholder="User"></ion-input>
+       <ion-input type="text" name="email" [(ngModel)]="email" placeholder="Email"></ion-input>
+       <ion-input type="password" name="password" [(ngModel)]="password" placeholder="Parola"></ion-input>
+       <ion-button expand="full" type="submit" (click)="clearUser()" (click)="clearEmail()" (click)="clearPass()">Create User</ion-button>
+     </form>
+     <ion-button expand="full" type="submit" (click)="backLogin()">Back</ion-button>
+    </div>
+ </ion-content>
