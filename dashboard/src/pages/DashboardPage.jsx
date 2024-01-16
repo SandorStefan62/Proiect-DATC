@@ -87,6 +87,8 @@ function DashboardPage() {
 
             if (response.status === 200) {
                 console.log(`User with id: ${selectedUser._id} has been updated successfully`);
+                setShowModal(false);
+                fetchAllUsers();
             }
         } catch (error) {
             console.error(`Failed to update user with id: ${selectedUser._id}: ${error}`);
@@ -128,6 +130,8 @@ function DashboardPage() {
 
             if (response.status === 201) {
                 console.log(`User registered successfully`);
+                setShowRegisterModal(false);
+                fetchAllUsers();
             } else {
                 console.error(`Failed to register user: ${response.data.error}`);
             }
@@ -137,23 +141,8 @@ function DashboardPage() {
     };
 
     const handleShowSpecificZones = (allergen) => {
-        // try {
-        //     const response = axios.get('https://datcbackend.azurewebsites.net/api/allergen/getAllAllergens', {
-        //         headers: {
-        //             'Authorization': localStorage.getItem('token')
-        //         }
-        //     });
-
-        //     if (response.status === 200) {
-        //         const allergens = response.data.allergens;
-        //         const zones = allergens.filter(zone => zone.allergenType === allergen);
-        //         setZones(zones);
-        //     }
-        // } catch (error) {
-        //     console.log(`Error retrieving specific zones: ${error}`);
-        // }
         setAllergen(allergen);
-        console.log(allergen);
+        setShowSpecificZoneModal(false);
     }
 
     return (
@@ -171,7 +160,7 @@ function DashboardPage() {
                 />
             </div>
             <div className="bg-gray-700 text-white w-5/6 flex items-center justify-center relative">
-                <MapComponent showAddModal={showAddModal} allergen={allergen} />
+                <MapComponent showAddModal={showAddModal} allergen={allergen} username={username} />
                 {showTable && (
                     <div className="absolute top-0 left-0 w-full h-full bg-gray-700 text-white flex items-center justify-center">
                         <div className="mt-4">
@@ -313,6 +302,15 @@ function DashboardPage() {
                                         type="text"
                                         value={allergen}
                                         onChange={(e) => setAllergen(e.target.value)}
+                                        className="mt-1 p-2 border rounded w-full"
+                                    />
+                                </label>
+                                <label className="block mb-4 text-left">
+                                    User:
+                                    <input
+                                        type="text"
+                                        value={username}
+                                        onChange={(e) => setUsername(e.target.value)}
                                         className="mt-1 p-2 border rounded w-full"
                                     />
                                 </label>

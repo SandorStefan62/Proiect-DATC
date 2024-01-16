@@ -1,7 +1,14 @@
 import React from 'react';
 import { useNavigate } from "react-router-dom";
 
-function Sidebar({ onAddButtonClick, onShowUsersButtonClick, onShowRegisterUserButtonClick, onShowSpecificZonesButtonClick, onRemoveFilterButtonClick, showAddModal, showTable }) {
+function Sidebar({
+    onAddButtonClick,
+    onShowUsersButtonClick,
+    onShowRegisterUserButtonClick,
+    onShowSpecificZonesButtonClick,
+    onRemoveFilterButtonClick,
+    showAddModal,
+    showTable }) {
     const navigate = useNavigate();
 
     const handleLogout = () => {

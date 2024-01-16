@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { GoogleMap, LoadScript, MarkerF, InfoWindow } from '@react-google-maps/api';
 import axios from 'axios';
 
-function MapComponent({ apiKey, showAddModal, allergen }) {
+function MapComponent({ apiKey, showAddModal, allergen, username }) {
     const [position, setPosition] = useState({ lat: 0, lng: 0 });
     const [allergenZones, setAllergenZones] = useState([]);
     const [newMarker, setNewMarker] = useState(null);
@@ -137,8 +137,12 @@ function MapComponent({ apiKey, showAddModal, allergen }) {
         fetchAllergenZones();
     }, []);
 
-    const filteredAllergenZones = allergen
-        ? allergenZones.filter((zone) => zone.allergenType === allergen)
+    const filteredAllergenZones = allergen || username
+        ? allergenZones.filter((zone) => {
+            const matchesAllergen = allergen ? zone.allergenType === allergen : true;
+            const matchesUsername = username ? zone.reportedBy === username : true;
+            return matchesAllergen && matchesUsername;
+        })
         : allergenZones;
 
     const handleMapClick = (e) => {
